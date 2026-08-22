@@ -1,0 +1,38 @@
+[nest]
+name = "uniswap-v2"
+chain = "mainnet"
+chain_id = 1
+# A keyless public endpoint, so this file is publishable: `nuthatch.toml` is pinned into the nest's
+# content address and must never carry a credential. It is enough to follow the tip. A *backfill*
+# needs archive depth this endpoint does not have - pass your own with `--rpc`, and check it first
+# with `nuthatch doctor --rpc <url>`.
+rpc_urls = [
+    "https://eth.drpc.org",
+]
+schema_version = 1
+block_timestamps = true
+
+# The factory: one fixed address, and the only event it emits is the birth announcement.
+[[contracts]]
+alias = "factory"
+address = "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f"
+start_block = 10000835
+abi = "abis/factory.json"
+
+# The template applied to every discovered pair. Deliberately the *trading* surface only: the pair
+# contract is also an ERC-20 for its LP shares, and indexing that `Transfer`/`Approval` pair would
+# add two rows per liquidity movement on every pair ever created, for data none of the trading views
+# read. Add them back if you want liquidity-position accounting; know what it costs first.
+[[templates]]
+name = "pair"
+abi = "abis/pair.json"
+
+# `PairCreated(token0 indexed, token1 indexed, pair, uint256)` - the child address is `pair`. Both
+# tokens arrive in the topics, so no contract call is needed to know what a pair trades. The unnamed
+# fourth parameter is the running pair count, not an address; do not mistake it for the child.
+[[factories]]
+watch = "factory"
+event = "PairCreated"
+child_param = "pair"
+template = "pair"
+start = 10000835
