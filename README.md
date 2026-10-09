@@ -1,6 +1,6 @@
 # uniswap-v2
 
-A [nuthatch](https://github.com/nightswatchhq/nuthatch) nest: **Uniswap V2 on Ethereum**.
+A [nuthatch](https://github.com/nuthatch-org/nuthatch) nest: **Uniswap V2 on Ethereum**.
 
 Every pair the factory has created, and the swaps, mints, burns and syncs on them.
 
@@ -25,7 +25,7 @@ Indexed blocks **25,781,624 to 25,811,560** and sealed **51,543 events**. Every 
 ## Run it
 
 ```sh
-nuthatch init --from https://github.com/nightswatchhq/uniswap-v2
+nuthatch init --from https://github.com/nuthatch-org/uniswap-v2
 cd uniswap-v2
 nuthatch dev --dir . --backfill 50000 --seal-direct
 nuthatch sql --dir . "SELECT count(*) FROM \"factory__pair_created\""
